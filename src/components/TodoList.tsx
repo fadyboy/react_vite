@@ -20,15 +20,23 @@ export default function TodoList({
     return a.completed ? 1 : -1;
   });
   return (
-    <div className="space-y-2">
-      {todosSorted.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          onCompleteTask={onCompleteTask}
-          handleDelete={handleDelete}
-        />
-      ))}
-    </div>
+    /*  Add empty tag to allow for conditional div section */
+    <>
+      <div className="space-y-2">
+        {todosSorted.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            onCompleteTask={onCompleteTask}
+            handleDelete={handleDelete}
+          />
+        ))}
+      </div>
+      {todos.length === 0 && (
+        <p className="text-center text-sm text-gray-500">
+          Please add a Todo item
+        </p>
+      )}
+    </>
   );
 }

@@ -1,10 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { dummyData } from "./data/todos";
 import AddTodo from "./components/AddTodo";
 import TodoList from "./components/TodoList";
+import TodoSummary from "./components/TodoSummary";
+import { Todo } from "./types/todo";
 
 function App() {
-  const [todos, setTodos] = useState(dummyData);
+  const [todos, setTodos] = useState(() => {
+    const savedTodos: Todo[] = JSON.parse(
+      localStorage.getItem("todos") || "[]",
+    );
+
+    return savedTodos.length > 0 ? savedTodos : dummyData;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
+
   function setTodoCompleted(id: number, completed: boolean) {
     setTodos((prevTodos) =>
       prevTodos.map((todo) => (todo.id === id ? { ...todo, completed } : todo)),
@@ -15,7 +28,7 @@ function App() {
     // we are not able to directly modify existing todos so we create a new array
     setTodos((prevTodos) => [
       {
-        id: prevTodos.length + 1,
+        id: Date.now(),
         title,
         completed: false,
       },
@@ -27,8 +40,12 @@ function App() {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id != id));
   }
 
+  function deleteAllCompletedTodos() {
+    setTodos((prevTodos) => prevTodos.filter((todo) => !todo.completed));
+  }
+
   return (
-    <main className="py-10 bg-sky-50 h-screen">
+    <main className="py-10 bg-sky-50 h-screen overflow-y-auto">
       <h1 className="font-bold text-3xl text-center space-y-5 p-5">
         Another TODO App
       </h1>
@@ -40,6 +57,10 @@ function App() {
           handleDelete={deleteTodo}
         />
       </div>
+      <TodoSummary
+        todos={todos}
+        deleteCompletedTodos={deleteAllCompletedTodos}
+      />
     </main>
   );
 }
