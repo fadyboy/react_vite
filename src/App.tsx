@@ -1,34 +1,18 @@
-import { useState } from "react";
-import { dummyData } from "./data/todos";
 import AddTodo from "./components/AddTodo";
 import TodoList from "./components/TodoList";
+import TodoSummary from "./components/TodoSummary";
+import useTodos from "./hooks/useTodos";
 
 function App() {
-  const [todos, setTodos] = useState(dummyData);
-  function setTodoCompleted(id: number, completed: boolean) {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) => (todo.id === id ? { ...todo, completed } : todo)),
-    );
-  }
-
-  function addTodo(title: string) {
-    // we are not able to directly modify existing todos so we create a new array
-    setTodos((prevTodos) => [
-      {
-        id: prevTodos.length + 1,
-        title,
-        completed: false,
-      },
-      ...prevTodos,
-    ]);
-  }
-
-  function deleteTodo(id: number) {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id != id));
-  }
-
+  const {
+    addTodo,
+    setTodoCompleted,
+    deleteAllCompletedTodos,
+    deleteTodo,
+    todos,
+  } = useTodos();
   return (
-    <main className="py-10 bg-sky-50 h-screen">
+    <main className="py-10 bg-sky-50 h-screen overflow-y-auto">
       <h1 className="font-bold text-3xl text-center space-y-5 p-5">
         Another TODO App
       </h1>
@@ -40,6 +24,10 @@ function App() {
           handleDelete={deleteTodo}
         />
       </div>
+      <TodoSummary
+        todos={todos}
+        deleteCompletedTodos={deleteAllCompletedTodos}
+      />
     </main>
   );
 }

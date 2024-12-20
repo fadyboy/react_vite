@@ -24,12 +24,10 @@ export default function TodoItem({
         <span className={todo.completed ? "line-through text-gray-400" : ""}>
           {todo.title}
         </span>
-        <span>
-          <button onClick={() => handleDelete(todo.id)} className="p-2">
-            <MdDelete size={20} />
-          </button>
-        </span>
       </label>
+      <button onClick={() => handleDelete(todo.id)} className="p-2">
+        <MdDelete size={20} />
+      </button>
     </div>
   );
 }
