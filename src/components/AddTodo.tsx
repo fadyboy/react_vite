@@ -23,7 +23,7 @@ export default function AddTodo({ onSubmit }: AddTodoProps) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Add a new todo"
-          className="rounded-s-md grow border border-gray-400 p-2 grow"
+          className="rounded-s-md grow border border-gray-400 p-2"
         />
         <button
           type="submit"
